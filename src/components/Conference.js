@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
 
 export default function Conference({ title, date }) {
   return (
@@ -23,7 +25,16 @@ export default function Conference({ title, date }) {
             Edit
           </Link>
         </div>
-        <button className="btn btn-success">Join</button>
+        <div
+          className="share-conf"
+          style={{ display: 'flex', justifyContent: 'space-between' }}
+        >
+          <button className="btn btn-success">Join</button>
+          <div className="social">
+            <FacebookIcon />
+            <TwitterIcon />
+          </div>
+        </div>
       </div>
     </div>
   );

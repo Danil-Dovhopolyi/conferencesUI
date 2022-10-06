@@ -1,30 +1,26 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { TextField } from '@mui/material';
 import Header from '../components/Header';
+import { TextField } from '@mui/material';
 import Datepicker from '../components/Datepicker';
 import Button from '@mui/material/Button';
 import DropDownListCountry from '../components/DropDownListCountry';
-import './FormStyles.scss';
 import { Link } from 'react-router-dom';
 import Coordinates from '../components/Coordinates';
-
-export default function CreateConference() {
-  const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => console.log(data);
-
+import './FormStyles.scss';
+export default function InfoConference() {
   return (
     <div className="wrapper">
       <Header />
-      <div className="create">
+      <div className="info">
         <div className="form">
-          <form className="form__create" onSubmit={handleSubmit(onSubmit)}>
+          <form className="form__info">
             <div className="form__title">
               <TextField
                 id="outlined-basic"
                 label="Title"
                 variant="outlined"
                 sx={{ width: '100%' }}
+                disabled
               />
             </div>
             <Datepicker />
@@ -35,8 +31,8 @@ export default function CreateConference() {
               <Link to={'/'} variant="contained">
                 <Button variant="contained">Back</Button>
               </Link>
-              <Button type="submit" variant="contained">
-                Save
+              <Button type="button" variant="contained" color="error">
+                Delete
               </Button>
             </div>
           </form>

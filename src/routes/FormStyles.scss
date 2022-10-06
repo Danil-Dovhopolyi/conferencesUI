@@ -3,7 +3,8 @@
   flex-direction: column;
   height: 100vh;
 }
-.create {
+.create,
+.info {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   width: 80%;
   height: 100%;
@@ -15,7 +16,8 @@
 }
 .form {
   display: flex;
-  &__create {
+  &__create,
+  &__info {
     margin-top: 2%;
     > div {
       margin: 2%;
