@@ -87,11 +87,12 @@ export default function Register() {
                 value={value}
                 onChange={setValue}
                 inputStyle={{ width: '87%', height: '40px' }}
+                buttonStyle={{ background: 'white' }}
               />
             </div>
           </div>
           <div className="div">
-            <DatePicker placeholder="birthdate" />
+            <DatePicker placeholder="Birthdate" />
           </div>
           <div>
             <Select color="neutral" placeholder="Choose role" size="md">

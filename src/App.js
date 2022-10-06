@@ -3,6 +3,7 @@ import Home from './routes/Home';
 import Login from './routes/Login';
 import Register from './routes/Register';
 import './App.scss';
+import CreateConference from './routes/CreateConference';
 function App() {
   return (
     <div className="App">
@@ -10,6 +11,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/create/new" element={<CreateConference />} />
       </Routes>
     </div>
   );
