@@ -1,6 +1,5 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { TextField } from '@mui/material';
+// import { TextField } from '@mui/material';
 import Header from '../components/Header';
 import Datepicker from '../components/Datepicker';
 import Button from '@mui/material/Button';
@@ -8,38 +7,44 @@ import DropDownListCountry from '../components/DropDownListCountry';
 import './FormStyles.scss';
 import { Link } from 'react-router-dom';
 import Coordinates from '../components/Coordinates';
+import { useAddConferenceMutation } from '../redux';
+import { useFormik, Field, Form } from 'formik';
+import { TextField } from 'formik-mui';
 
 export default function CreateConference() {
-  const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const [addConference] = useAddConferenceMutation();
 
   return (
     <div className="wrapper">
       <Header />
       <div className="create">
         <div className="form">
-          <form className="form__create" onSubmit={handleSubmit(onSubmit)}>
+          <Form className="form__create">
             <div className="form__title">
-              <TextField
+              <Field
                 id="outlined-basic"
+                name="title"
                 label="Title"
                 variant="outlined"
                 sx={{ width: '100%' }}
+                component={TextField}
               />
             </div>
-            <Datepicker />
-            <DropDownListCountry />
-            <Coordinates />
 
+            <Datepicker name="date" />
+
+            <DropDownListCountry name="country" />
+
+            <Coordinates />
             <div className="form__buttons">
               <Link to={'/'} variant="contained">
                 <Button variant="contained">Back</Button>
               </Link>
               <Button type="submit" variant="contained">
-                Save
+                Create
               </Button>
             </div>
-          </form>
+          </Form>
         </div>
         <div className="map">
           <h1>MAP</h1>
