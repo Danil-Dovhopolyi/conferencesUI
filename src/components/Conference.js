@@ -3,7 +3,12 @@ import { Link } from 'react-router-dom';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 
-export default function Conference({ title, date }) {
+export default function Conference({
+  title,
+  date,
+  id,
+  handleDeleteConferences,
+}) {
   return (
     <div className="p-2">
       <div class="d-flex w-100 justify-content-between m-1">
@@ -17,6 +22,7 @@ export default function Conference({ title, date }) {
         <button
           className="meet__btn btn btn-danger w-25 "
           style={{ opacity: 0.95 }}
+          onClick={() => handleDeleteConferences({ id })}
         >
           Delete
         </button>
