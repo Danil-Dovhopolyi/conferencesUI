@@ -4,7 +4,8 @@
   height: 100vh;
 }
 .create,
-.info {
+.info,
+.edit {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   width: 80%;
   height: 100%;
@@ -17,7 +18,8 @@
 .form {
   display: flex;
   &__create,
-  &__info {
+  &__info,
+  &__edit {
     margin-top: 2%;
     > div {
       margin: 2%;

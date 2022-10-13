@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import { FacebookButton, FacebookCount } from 'react-social';
 
 export default function Conference({
   title,
@@ -9,6 +10,7 @@ export default function Conference({
   id,
   handleDeleteConferences,
 }) {
+  let url = `http://localhost:3000/info/?id=${id}`;
   return (
     <div className="p-2">
       <div class="d-flex w-100 justify-content-between m-1">
@@ -16,17 +18,21 @@ export default function Conference({
         <small>{date}</small>
       </div>
       <div className="meet__functionality d-flex justify-content-between m-3">
-        <Link type="button" className="btn btn-info w-25">
+        <Link
+          to={`/info/?id=${id}`}
+          type="button"
+          className="btn btn-info w-25"
+        >
           Info
         </Link>
         <button
           className="meet__btn btn btn-danger w-25 "
           style={{ opacity: 0.95 }}
-          onClick={() => handleDeleteConferences({ id })}
+          onClick={() => handleDeleteConferences(id)}
         >
           Delete
         </button>
-        <Link type="button" class="btn btn-warning w-25">
+        <Link to={`/edit/?id=${id}`} type="button" class="btn btn-warning w-25">
           Edit
         </Link>
       </div>
@@ -36,7 +42,10 @@ export default function Conference({
       >
         <button className="btn btn-success">Join</button>
         <div className="social">
-          <FacebookIcon />
+          <FacebookButton url={url} appId={436128925307607}>
+            <FacebookCount url={url} />
+            {' Share ' + url}
+          </FacebookButton>
           <TwitterIcon />
         </div>
       </div>

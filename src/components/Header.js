@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,13 +10,27 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../hooks/useAuth';
 const pages = ['Create'];
 const settings = ['Logout'];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const { user, setUser } = useContext(AuthContext);
+  const storage = JSON.parse(localStorage.getItem('user'));
 
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem('user');
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      setUser(foundUser);
+    }
+  }, []);
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('user');
+  };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -79,7 +93,7 @@ const ResponsiveAppBar = () => {
             variant="h5"
             noWrap
             component="a"
-            href=""
+            href="/"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -108,9 +122,26 @@ const ResponsiveAppBar = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                User
-              </IconButton>
+              {storage ? (
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  {storage.user.firstname}
+                </IconButton>
+              ) : (
+                <div style={{ display: 'flex', gap: '3%' }}>
+                  <Link
+                    to={'/login'}
+                    style={{ color: 'white', textDecoration: 'none' }}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to={'/register'}
+                    style={{ color: 'white', textDecoration: 'none' }}
+                  >
+                    Register
+                  </Link>
+                </div>
+              )}
             </Tooltip>
             <Menu
               sx={{ mt: '45px' }}
@@ -130,7 +161,9 @@ const ResponsiveAppBar = () => {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                  <Typography textAlign="center" onClick={() => handleLogout()}>
+                    {setting}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>

@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@material-ui/core": "^4.12.4",
     "@mui/icons-material": "^5.10.6",
     "@mui/joy": "^5.0.0-alpha.48",
     "@mui/material": "^5.10.8",
@@ -19,6 +20,7 @@
     "bootstrap": "^5.2.2",
     "dayjs": "^1.11.5",
     "formik": "^2.2.9",
+    "formik-material-ui": "^4.0.0-alpha.2",
     "formik-mui": "^5.0.0-alpha.0",
     "mui-tel-input": "^2.0.2",
     "react": "^18.2.0",
@@ -31,10 +33,13 @@
     "react-router": "^6.4.1",
     "react-router-dom": "^6.4.1",
     "react-scripts": "5.0.1",
+    "react-social": "^1.10.0",
     "react-widgets": "^5.8.4",
+    "redux-csrf": "^1.1.0",
     "sass": "^1.55.0",
     "styled-components": "^5.3.6",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",

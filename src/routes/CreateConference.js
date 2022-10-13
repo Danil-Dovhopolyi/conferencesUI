@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
-import Datepicker from '../components/Datepicker';
 import Button from '@mui/material/Button';
 import DropDownListCountry from '../components/DropDownListCountry';
 import './FormStyles.scss';

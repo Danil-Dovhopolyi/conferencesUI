@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { CssVarsProvider } from '@mui/joy/styles';
 import Sheet from '@mui/joy/Sheet';
 import Typography from '@mui/joy/Typography';
@@ -6,7 +6,40 @@ import TextField from '@mui/joy/TextField';
 import Button from '@mui/joy/Button';
 import Link from '@mui/joy/Link';
 import Header from '../components/Header';
+import { useFormik } from 'formik';
+import axios from 'axios';
+import { AuthContext } from '../hooks/useAuth';
+import { redirect } from 'react-router';
 export default function Login() {
+  const { user, setUser } = useContext(AuthContext);
+
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    onSubmit: (values, { resetForm }) => {
+      axios
+        .post('http://127.0.0.1:8000/api/login', {
+          email: formik.values.email,
+          password: formik.values.password,
+        })
+        .then((res) =>
+          setUser((prevState) => ({
+            ...res.data,
+            isLoggin: true,
+            // Role:
+          }))
+        )
+        .catch((err) => console.log(err));
+      resetForm();
+    },
+  });
+
+  const storage = localStorage.setItem('user', JSON.stringify(user));
+  // if (storage.isLoggin) {
+  //   return redirect('/');
+  // }
   return (
     <>
       <Header />
@@ -34,34 +67,39 @@ export default function Login() {
               </Typography>
               <Typography level="body2">Sign in to continue.</Typography>
             </div>
-            <TextField
-              // html input attribute
-              name="email"
-              type="email"
-              placeholder="johndoe@email.com"
-              // pass down to FormLabel as children
-              label="Email"
-            />
-            <TextField
-              name="password"
-              type="password"
-              placeholder="password"
-              label="Password"
-            />
-            <Button
-              sx={{
-                mt: 1, // margin top
-              }}
-            >
-              Log in
-            </Button>
-            <Typography
-              endDecorator={<Link href="/register">Sign up</Link>}
-              fontSize="sm"
-              sx={{ alignSelf: 'center' }}
-            >
-              Don&apos;t have an account?
-            </Typography>
+            <form onSubmit={formik.handleSubmit}>
+              <TextField
+                name="email"
+                type="email"
+                placeholder="johndoe@email.com"
+                label="Email"
+                onChange={formik.handleChange}
+                value={formik.values.email}
+              />
+              <TextField
+                name="password"
+                type="password"
+                placeholder="password"
+                label="Password"
+                onChange={formik.handleChange}
+                value={formik.values.password}
+              />
+              <Button
+                sx={{
+                  mt: 1, // margin top
+                }}
+                type="submit"
+              >
+                Log in
+              </Button>
+              <Typography
+                endDecorator={<Link href="/register">Sign up</Link>}
+                fontSize="sm"
+                sx={{ alignSelf: 'center' }}
+              >
+                Don&apos;t have an account?
+              </Typography>
+            </form>
           </Sheet>
         </main>
       </CssVarsProvider>

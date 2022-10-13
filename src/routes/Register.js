@@ -1,129 +1,243 @@
 import React, { useState } from 'react';
-import { CssVarsProvider } from '@mui/joy/styles';
-import Sheet from '@mui/joy/Sheet';
-import Typography from '@mui/joy/Typography';
-import TextField from '@mui/joy/TextField';
-import Button from '@mui/joy/Button';
-import Link from '@mui/joy/Link';
-import Select from '@mui/joy/Select';
-import Option from '@mui/joy/Option';
+import {
+  Grid,
+  makeStyles,
+  Card,
+  CardContent,
+  MenuItem,
+  InputLabel,
+  Select,
+  CardActions,
+  Button,
+  CardHeader,
+  FormControl,
+} from '@material-ui/core';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
-import DatePicker from 'react-widgets/DatePicker';
-import 'react-widgets/scss/styles.scss';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import { TextField } from 'formik-material-ui';
+const useStyle = makeStyles((theme) => ({
+  padding: {
+    padding: theme.spacing(3),
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
+}));
 
-export default function Register() {
-  const [value, setValue] = useState();
+//Data
+const initialValues = {
+  firstName: '',
+  lastName: '',
+  country: '',
+  phone: '',
+  email: '',
+  password: '',
+  role: '',
+  birthdate: '',
+};
+
+const countries = [
+  {
+    label: 'Ukraine',
+    value: 'Ukraine',
+  },
+  {
+    label: 'Germany',
+    value: 'Germany',
+  },
+  {
+    label: 'Sweden',
+    value: 'Sweden',
+  },
+  {
+    label: 'Poland',
+    value: 'Poland',
+  },
+  {
+    label: 'United',
+    value: 'United Kingdom',
+  },
+];
+const roles = [
+  {
+    label: 'Conferee',
+    value: 2,
+  },
+  {
+    label: 'Listener',
+    value: 3,
+  },
+];
+
+//password validation
+const lowercaseRegEx = /(?=.*[a-z])/;
+const uppercaseRegEx = /(?=.*[A-Z])/;
+const numericRegEx = /(?=.*[0-9])/;
+const lengthRegEx = /(?=.{6,})/;
+
+//validation schema
+let validationSchema = Yup.object().shape({
+  firstName: Yup.string().required('Required'),
+  lastName: Yup.string().required('Required'),
+  email: Yup.string().email('Invalid email').required('Required'),
+  password: Yup.string()
+    .matches(
+      lowercaseRegEx,
+      'Must contain one lowercase alphabetical character!'
+    )
+    .matches(
+      uppercaseRegEx,
+      'Must contain one uppercase alphabetical character!'
+    )
+    .matches(numericRegEx, 'Must contain one numeric character!')
+    .matches(lengthRegEx, 'Must contain 6 characters!')
+    .required('Required!'),
+});
+
+const UserForm = () => {
+  const classes = useStyle();
+
+  const onSubmit = (values) => {
+    console.log(values);
+  };
+  const [phone, setPhone] = useState();
 
   return (
-    <CssVarsProvider>
-      <main>
-        <Sheet
-          sx={{
-            maxWidth: 500,
-            mx: 'auto', // margin left & right
-            my: 4, // margin top & botom
-            py: 3, // padding top & bottom
-            px: 2, // padding left & right
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            gap: 2,
-            borderRadius: 'sm',
-            boxShadow: 'md',
-          }}
-          variant="outlined"
-        >
-          <div>
-            <Typography level="h4" component="h1">
-              <b>Welcome!</b>
-            </Typography>
-            <Typography level="body2">Register to continue.</Typography>
-          </div>
-          <div className="user__name d-flex gap-3">
-            <TextField
-              name="firstname"
-              type="text"
-              placeholder="Name"
-              label="Firstname"
-            />
-            <TextField
-              name="lastname"
-              type="text"
-              placeholder="Lastname"
-              label="Lastname"
-            />
-          </div>
-          <div className="user__pass d-flex gap-3">
-            <TextField
-              name="password"
-              type="password"
-              placeholder="Password"
-              label="Password"
-            />
-            <TextField
-              name="password_confirmed"
-              type="password"
-              placeholder="Repeat password"
-              label="Password"
-            />
-          </div>
+    <Grid container justify="center" spacing={1}>
+      <Grid item md={6}>
+        <Card className={classes.padding}>
+          <CardHeader title="REGISTER FORM"></CardHeader>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            {({ dirty, isValid, values, handleChange, handleBlur }) => {
+              return (
+                <Form>
+                  <CardContent>
+                    <Grid item container spacing={1} justify="center">
+                      <Grid item xs={12} sm={6} md={6}>
+                        <Field
+                          label="First Name"
+                          variant="outlined"
+                          fullWidth
+                          name="firstName"
+                          value={values.firstName}
+                          component={TextField}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6} md={6}>
+                        <Field
+                          label="Last Name"
+                          variant="outlined"
+                          fullWidth
+                          name="lastName"
+                          value={values.lastName}
+                          component={TextField}
+                        />
+                      </Grid>
 
-          <div className="d-flex align-items-center gap-3">
-            <div className="div">
-              <TextField
-                name="email"
-                type="email"
-                placeholder="johndoe@email.com"
-                label="Email"
-              />
-            </div>
-            <div className="div">
-              <label class="JoyFormLabel-root css-q3uzpg-JoyFormLabel-root">
-                Phone
-              </label>
-              <PhoneInput
-                placeholder="Enter phone number"
-                value={value}
-                onChange={setValue}
-                inputStyle={{ width: '87%', height: '40px' }}
-                buttonStyle={{ background: 'white' }}
-              />
-            </div>
-          </div>
-          <div className="div">
-            <DatePicker placeholder="Birthdate" />
-          </div>
-          <div>
-            <Select color="neutral" placeholder="Choose role" size="md">
-              <Option value={2}>Conferee</Option>
-              <Option value={3}>Listener</Option>
-            </Select>
-          </div>
-          <div>
-            <Select color="neutral" placeholder="Choose country" size="md">
-              <Option value={'Ukraine'}>Ukraine</Option>
-              <Option value={'USA'}>USA</Option>
-              <Option value={'Poland'}>Poland</Option>
-              <Option value={'France'}>France</Option>
-            </Select>
-          </div>
-          <Button
-            sx={{
-              mt: 1, // margin top
+                      <Grid item xs={12} sm={6} md={12}>
+                        <FormControl fullWidth variant="outlined">
+                          <InputLabel id="demo-simple-select-outlined-label">
+                            Country
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-outlined-label"
+                            id="demo-simple-select-outlined"
+                            label="Country"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.country}
+                            name="country"
+                          >
+                            <MenuItem>None</MenuItem>
+                            {countries.map((item) => (
+                              <MenuItem key={item.value} value={item.value}>
+                                {item.label}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={12} sm={6} md={6}>
+                        <PhoneInput
+                          country={'us'}
+                          value={values.phone}
+                          onChange={(phone) => handleChange(phone)}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6} md={12}>
+                        <FormControl fullWidth variant="outlined">
+                          <InputLabel id="demo-simple-select-outlined-label">
+                            Role
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-outlined-label"
+                            id="demo-simple-select-outlined"
+                            label="role"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.role}
+                            name="role"
+                          >
+                            <MenuItem>None</MenuItem>
+                            {roles.map((item) => (
+                              <MenuItem key={item.value} value={item.value}>
+                                {item.label}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={12} sm={6} md={12}>
+                        <input type="date" />
+                      </Grid>
+                      <Grid item xs={12} sm={6} md={6}>
+                        <Field
+                          label="Email"
+                          variant="outlined"
+                          fullWidth
+                          name="email"
+                          value={values.email}
+                          component={TextField}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6} md={6}>
+                        <Field
+                          label="Password"
+                          variant="outlined"
+                          fullWidth
+                          name="password"
+                          value={values.password}
+                          type="password"
+                          component={TextField}
+                        />
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      disabled={!dirty || !isValid}
+                      variant="contained"
+                      color="primary"
+                      type="Submit"
+                      className={classes.button}
+                    >
+                      REGISTER
+                    </Button>
+                  </CardActions>
+                </Form>
+              );
             }}
-          >
-            Register
-          </Button>
-          <Typography
-            endDecorator={<Link href="/login">Login</Link>}
-            fontSize="sm"
-            sx={{ alignSelf: 'center' }}
-          >
-            Do have account?
-          </Typography>
-        </Sheet>
-      </main>
-    </CssVarsProvider>
+          </Formik>
+        </Card>
+      </Grid>
+    </Grid>
   );
-}
+};
+
+export default UserForm;

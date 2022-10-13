@@ -17,10 +17,10 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function Home() {
   const { data = [], isLoading } = useGetConferencesQuery();
-  const [deleteConferences] = useDeleteConferencesMutation();
+  const [deleteConferences, { isError }] = useDeleteConferencesMutation();
 
   const handleDeleteConferences = async (id) => {
-    await deleteConferences(id).unwrap();
+    await deleteConferences(id);
   };
   if (isLoading) return <p>Loading...</p>;
 
