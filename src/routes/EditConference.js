@@ -1,115 +1,176 @@
-import React, { useState } from 'react';
-import Header from '../components/Header';
+import React, { useContext } from 'react';
+import {
+  Card,
+  CardContent,
+  MenuItem,
+  InputLabel,
+  Select,
+  CardActions,
+  Button,
+  CardHeader,
+  FormControl,
+} from '@material-ui/core';
+import 'react-phone-input-2/lib/style.css';
+import { Formik, Form, Field } from 'formik';
 import { TextField } from '@mui/material';
-import Datepicker from '../components/Phone';
-import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
-import './FormStyles.scss';
+import Header from '../components/Header';
 import { useGetConferenceByIdQuery } from '../redux';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { countries } from '../mock/country';
-import { useFormik } from 'formik';
 import { useUpdateConferenceMutation } from '../redux';
-export default function EditConference() {
+import Map from '../components/Map';
+import './FormStyles.scss';
+
+//Data
+
+const countries = [
+  {
+    label: 'Ukraine',
+    value: 'Ukraine',
+  },
+  {
+    label: 'Germany',
+    value: 'Germany',
+  },
+  {
+    label: 'Sweden',
+    value: 'Sweden',
+  },
+  {
+    label: 'Poland',
+    value: 'Poland',
+  },
+  {
+    label: 'United',
+    value: 'United Kingdom',
+  },
+];
+
+const EditConference = () => {
   const params = new URL(document.location.href).searchParams;
   const id = params.get('id'); // "1"
-  const [country, setCountry] = useState('');
-  const [updateConference] = useUpdateConferenceMutation();
+  const [updateConference, updateResult] = useUpdateConferenceMutation(id);
+  console.log(updateResult);
 
-  const handleChangeCountry = (event) => {
-    setCountry(event.target.value);
+  const onSubmit = async (values) => {
+    await updateConference({ id, ...values });
   };
-  const formik = useFormik({
-    initialValues: {
-      title: '',
-      date: '',
-      latitude: '',
-      longitude: '',
-      country: '',
-    },
-    onSubmit: (values) => {
-      console.log(values);
-    },
-  });
+
   const { data, isLoading } = useGetConferenceByIdQuery(id);
   if (isLoading) return <p>Loading...</p>;
-  return (
-    <div className="wrapper">
-      <Header />
-      <div className="edit">
-        <div className="form">
-          <form className="form__edit" onSubmit={formik.handleSubmit}>
-            <div className="form__title">
-              <TextField
-                id="outlined-basic"
-                variant="outlined"
-                sx={{ width: '100%' }}
-                defaultValue={data.title}
-                onChange={formik.handleChange}
-              />
-            </div>
-            <Datepicker />
 
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Country</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  defaultValue={data.country}
-                  label="Country"
-                  SelectProps={{
-                    renderValue: (country) => country,
+  const initialValues = {
+    title: data.title,
+    country: data.country,
+    longitude: data.longitude,
+    latitude: data.latitude,
+  };
+
+  return (
+    <>
+      <Header />
+      <Card style={{ margin: '2% auto', width: '80%' }}>
+        <CardHeader title="EDIT FORM"></CardHeader>
+        <Formik initialValues={initialValues} onSubmit={onSubmit}>
+          {({ dirty, isValid, values, handleChange, handleBlur }) => {
+            return (
+              <Form className="form__edit">
+                <CardContent
+                  className="content"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-around',
                   }}
                 >
-                  {countries.map((country) => (
-                    <MenuItem value={country.name}>{country.name}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
+                  <div
+                    className="edit"
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      width: '45%',
+                    }}
+                  >
+                    <TextField
+                      id="title"
+                      name="title"
+                      label="Title"
+                      variant="outlined"
+                      sx={{ width: '100%' }}
+                      value={values.title}
+                      onChange={handleChange}
+                    />
 
-            <div className="coordinates">
-              <TextField
-                id="outlined-number"
-                label="Latitude"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                defaultValue={data.latitude}
-                onChange={formik.handleChange}
-              />
-              <TextField
-                id="outlined-number"
-                label="Longitude"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                defaultValue={data.longitude}
-                onChange={formik.handleChange}
-              />
-            </div>
-
-            <div className="form__buttons">
-              <Link to={'/'} variant="contained">
-                <Button variant="contained">Back</Button>
-              </Link>
-              <Button type="submit" variant="contained" color="warning">
-                Edit
-              </Button>
-            </div>
-          </form>
-        </div>
-        <div className="map">
-          <h1>MAP</h1>
-        </div>
-      </div>
-    </div>
+                    <FormControl fullWidth variant="outlined">
+                      <InputLabel id="demo-simple-select-outlined-label">
+                        Country
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        label="Country"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.country}
+                        name="country"
+                      >
+                        <MenuItem>None</MenuItem>
+                        {countries.map((item) => (
+                          <MenuItem key={item.value} value={item.value}>
+                            {item.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    <div
+                      className="coordinates"
+                      style={{ dispay: 'flex', gap: '3%' }}
+                    >
+                      <TextField
+                        id="longitude"
+                        label="Longitude"
+                        type="number"
+                        value={values.longitude}
+                        onChange={handleChange}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                      <TextField
+                        id="latitude"
+                        label="Latitude"
+                        type="number"
+                        value={values.latitude}
+                        onChange={handleChange}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </div>
+                    <CardActions>
+                      <Button
+                        disabled={!dirty || !isValid}
+                        variant="contained"
+                        color="primary"
+                        type="Submit"
+                      >
+                        Edit
+                      </Button>
+                    </CardActions>
+                  </div>
+                  <div className="edit-map">
+                    <Map
+                      draggable={true}
+                      latitude={values.latitude}
+                      longitude={values.longitude}
+                    />
+                  </div>
+                </CardContent>
+              </Form>
+            );
+          }}
+        </Formik>
+      </Card>
+    </>
   );
-}
+};
+
+export default EditConference;

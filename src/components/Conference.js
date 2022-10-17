@@ -25,13 +25,7 @@ export default function Conference({
         >
           Info
         </Link>
-        <button
-          className="meet__btn btn btn-danger w-25 "
-          style={{ opacity: 0.95 }}
-          onClick={() => handleDeleteConferences(id)}
-        >
-          Delete
-        </button>
+
         <Link to={`/edit/?id=${id}`} type="button" class="btn btn-warning w-25">
           Edit
         </Link>

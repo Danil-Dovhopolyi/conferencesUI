@@ -19,7 +19,6 @@ const ResponsiveAppBar = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const { user, setUser } = useContext(AuthContext);
   const storage = JSON.parse(localStorage.getItem('user'));
-
   useEffect(() => {
     const loggedInUser = localStorage.getItem('user');
     if (loggedInUser) {
@@ -44,7 +43,7 @@ const ResponsiveAppBar = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" style={{ backgroundColor: '#1976d2' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -56,7 +55,7 @@ const ResponsiveAppBar = () => {
               mr: 2,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'Montserrat',
-              color: 'inherit',
+              color: 'white',
               textDecoration: 'none',
             }}
           >
@@ -100,7 +99,7 @@ const ResponsiveAppBar = () => {
               flexGrow: 1,
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: 'white',
               textDecoration: 'none',
             }}
           >

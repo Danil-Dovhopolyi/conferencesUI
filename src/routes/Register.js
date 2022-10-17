@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import {
   Grid,
   makeStyles,
@@ -12,11 +12,14 @@ import {
   CardHeader,
   FormControl,
 } from '@material-ui/core';
-import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { TextField } from 'formik-material-ui';
+import Header from '../components/Header';
+import { AuthContext } from '../hooks/useAuth';
+import axios from 'axios';
+import { Navigate } from 'react-router';
 const useStyle = makeStyles((theme) => ({
   padding: {
     padding: theme.spacing(3),
@@ -31,11 +34,10 @@ const initialValues = {
   firstName: '',
   lastName: '',
   country: '',
-  phone: '',
   email: '',
   password: '',
+  password_confirmation: '',
   role: '',
-  birthdate: '',
 };
 
 const countries = [
@@ -63,11 +65,11 @@ const countries = [
 const roles = [
   {
     label: 'Conferee',
-    value: 2,
+    value: 'conferee',
   },
   {
     label: 'Listener',
-    value: 3,
+    value: 'listener',
   },
 ];
 
@@ -96,148 +98,176 @@ let validationSchema = Yup.object().shape({
     .required('Required!'),
 });
 
-const UserForm = () => {
+const Register = () => {
+  const { user, setUser } = useContext(AuthContext);
   const classes = useStyle();
-
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = (values, { resetForm }) => {
+    axios
+      .post('http://127.0.0.1:8000/api/register', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        firstname: values.firstName,
+        lastname: values.lastName,
+        email: values.email,
+        password: values.password,
+        password_confirmation: values.password_confirmation,
+        country: values.country,
+        role: values.role,
+      })
+      .then((res) =>
+        setUser((prevState) => ({
+          ...res.data,
+          isLoggin: true,
+        }))
+      )
+      .catch((err) => console.log(err.response));
+    resetForm();
   };
-  const [phone, setPhone] = useState();
-
+  const storage = localStorage.setItem('user', JSON.stringify(user));
+  if (user) {
+    return <Navigate replace to={'/'} />;
+  }
   return (
-    <Grid container justify="center" spacing={1}>
-      <Grid item md={6}>
-        <Card className={classes.padding}>
-          <CardHeader title="REGISTER FORM"></CardHeader>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
-          >
-            {({ dirty, isValid, values, handleChange, handleBlur }) => {
-              return (
-                <Form>
-                  <CardContent>
-                    <Grid item container spacing={1} justify="center">
-                      <Grid item xs={12} sm={6} md={6}>
-                        <Field
-                          label="First Name"
-                          variant="outlined"
-                          fullWidth
-                          name="firstName"
-                          value={values.firstName}
-                          component={TextField}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6} md={6}>
-                        <Field
-                          label="Last Name"
-                          variant="outlined"
-                          fullWidth
-                          name="lastName"
-                          value={values.lastName}
-                          component={TextField}
-                        />
-                      </Grid>
+    <>
+      <Header />
+      <Grid container justify="center" spacing={1}>
+        <Grid item md={6}>
+          <Card className={classes.padding}>
+            <CardHeader title="REGISTER FORM"></CardHeader>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={onSubmit}
+            >
+              {({ dirty, isValid, values, handleChange, handleBlur }) => {
+                return (
+                  <Form>
+                    <CardContent>
+                      <Grid item container spacing={1} justify="center">
+                        <Grid item xs={12} sm={6} md={6}>
+                          <Field
+                            label="First Name"
+                            variant="outlined"
+                            fullWidth
+                            name="firstName"
+                            value={values.firstName}
+                            component={TextField}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={6}>
+                          <Field
+                            label="Last Name"
+                            variant="outlined"
+                            fullWidth
+                            name="lastName"
+                            value={values.lastName}
+                            component={TextField}
+                          />
+                        </Grid>
 
-                      <Grid item xs={12} sm={6} md={12}>
-                        <FormControl fullWidth variant="outlined">
-                          <InputLabel id="demo-simple-select-outlined-label">
-                            Country
-                          </InputLabel>
-                          <Select
-                            labelId="demo-simple-select-outlined-label"
-                            id="demo-simple-select-outlined"
-                            label="Country"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.country}
-                            name="country"
-                          >
-                            <MenuItem>None</MenuItem>
-                            {countries.map((item) => (
-                              <MenuItem key={item.value} value={item.value}>
-                                {item.label}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
+                        <Grid item xs={12} sm={6} md={12}>
+                          <FormControl fullWidth variant="outlined">
+                            <InputLabel id="demo-simple-select-outlined-label">
+                              Country
+                            </InputLabel>
+                            <Select
+                              labelId="demo-simple-select-outlined-label"
+                              id="demo-simple-select-outlined"
+                              label="Country"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.country}
+                              name="country"
+                            >
+                              <MenuItem>None</MenuItem>
+                              {countries.map((item) => (
+                                <MenuItem key={item.value} value={item.value}>
+                                  {item.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Grid>
+
+                        <Grid item xs={12} sm={6} md={12}>
+                          <FormControl fullWidth variant="outlined">
+                            <InputLabel id="demo-simple-select-outlined-label">
+                              Role
+                            </InputLabel>
+                            <Select
+                              labelId="demo-simple-select-outlined-label"
+                              id="role"
+                              label="role"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.role}
+                              name="role"
+                            >
+                              <MenuItem>None</MenuItem>
+                              {roles.map((item) => (
+                                <MenuItem key={item.value} value={item.value}>
+                                  {item.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Grid>
+
+                        <Grid item xs={12} sm={6} md={6}>
+                          <Field
+                            label="Email"
+                            variant="outlined"
+                            fullWidth
+                            name="email"
+                            value={values.email}
+                            component={TextField}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={6}>
+                          <Field
+                            label="Password"
+                            variant="outlined"
+                            fullWidth
+                            name="password"
+                            value={values.password}
+                            type="password"
+                            component={TextField}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={6}>
+                          <Field
+                            label="Repeat Password"
+                            variant="outlined"
+                            fullWidth
+                            name="password_confirmation"
+                            value={values.password_confirmation}
+                            type="password"
+                            component={TextField}
+                          />
+                        </Grid>
                       </Grid>
-                      <Grid item xs={12} sm={6} md={6}>
-                        <PhoneInput
-                          country={'us'}
-                          value={values.phone}
-                          onChange={(phone) => handleChange(phone)}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6} md={12}>
-                        <FormControl fullWidth variant="outlined">
-                          <InputLabel id="demo-simple-select-outlined-label">
-                            Role
-                          </InputLabel>
-                          <Select
-                            labelId="demo-simple-select-outlined-label"
-                            id="demo-simple-select-outlined"
-                            label="role"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.role}
-                            name="role"
-                          >
-                            <MenuItem>None</MenuItem>
-                            {roles.map((item) => (
-                              <MenuItem key={item.value} value={item.value}>
-                                {item.label}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </Grid>
-                      <Grid item xs={12} sm={6} md={12}>
-                        <input type="date" />
-                      </Grid>
-                      <Grid item xs={12} sm={6} md={6}>
-                        <Field
-                          label="Email"
-                          variant="outlined"
-                          fullWidth
-                          name="email"
-                          value={values.email}
-                          component={TextField}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6} md={6}>
-                        <Field
-                          label="Password"
-                          variant="outlined"
-                          fullWidth
-                          name="password"
-                          value={values.password}
-                          type="password"
-                          component={TextField}
-                        />
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      disabled={!dirty || !isValid}
-                      variant="contained"
-                      color="primary"
-                      type="Submit"
-                      className={classes.button}
-                    >
-                      REGISTER
-                    </Button>
-                  </CardActions>
-                </Form>
-              );
-            }}
-          </Formik>
-        </Card>
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        disabled={!dirty || !isValid}
+                        variant="contained"
+                        color="primary"
+                        type="Submit"
+                        className={classes.button}
+                      >
+                        REGISTER
+                      </Button>
+                    </CardActions>
+                  </Form>
+                );
+              }}
+            </Formik>
+          </Card>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 
-export default UserForm;
+export default Register;

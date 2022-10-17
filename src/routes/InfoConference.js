@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import { TextField } from '@mui/material';
-import Datepicker from '../components/Phone';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
-import Coordinates from '../components/Coordinates';
 import './FormStyles.scss';
 import { useGetConferenceByIdQuery } from '../redux';
 import Box from '@mui/material/Box';
@@ -13,16 +11,13 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { countries } from '../mock/country';
-import { useDeleteConferencesMutation } from '../redux';
+import { useDeleteConferenceMutation } from '../redux';
+import Map from '../components/Map';
 
 export default function InfoConference() {
   const params = new URL(document.location.href).searchParams;
   const id = params.get('id'); // "1"
-  const [country, setCountry] = useState('');
-  const handleChangeCountry = (event) => {
-    setCountry(event.target.value);
-  };
-  const [deleteConferences] = useDeleteConferencesMutation();
+  const [deleteConferences] = useDeleteConferenceMutation(id);
   const handleDeleteConferences = async (id) => {
     await deleteConferences(id);
   };
@@ -44,7 +39,6 @@ export default function InfoConference() {
                 value={data.title}
               />
             </div>
-            <Datepicker />
 
             <Box sx={{ minWidth: 120 }}>
               <FormControl fullWidth>
@@ -102,7 +96,11 @@ export default function InfoConference() {
           </form>
         </div>
         <div className="map">
-          <h1>MAP</h1>
+          <Map
+            longitude={data.longitude}
+            latitude={data.latitude}
+            draggable={false}
+          />
         </div>
       </div>
     </div>

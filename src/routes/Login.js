@@ -9,7 +9,7 @@ import Header from '../components/Header';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { AuthContext } from '../hooks/useAuth';
-import { redirect } from 'react-router';
+import { Navigate } from 'react-router';
 export default function Login() {
   const { user, setUser } = useContext(AuthContext);
 
@@ -37,9 +37,9 @@ export default function Login() {
   });
 
   const storage = localStorage.setItem('user', JSON.stringify(user));
-  // if (storage.isLoggin) {
-  //   return redirect('/');
-  // }
+  if (user) {
+    return <Navigate replace to={'/'} />;
+  }
   return (
     <>
       <Header />

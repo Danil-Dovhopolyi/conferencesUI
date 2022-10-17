@@ -8,6 +8,9 @@ import CreateConference from './routes/CreateConference';
 import InfoConference from './routes/InfoConference';
 import EditConference from './routes/EditConference';
 import { AuthContext } from './hooks/useAuth';
+import { PrivateRouteInfoAndCreate } from './routes/PrivateRoute/PrivateRouteInfoAndCreate';
+import { PrivateRouteEdit } from './routes/PrivateRoute/PrivateRouteEdit';
+import { PrivateRouteAuth } from './routes/PrivateRoute/PrivateRouteAuth';
 function App() {
   const [user, setUser] = useState(null);
   const providerUser = useMemo(() => ({ user, setUser }), [user, setUser]);
@@ -15,12 +18,22 @@ function App() {
     <div className="App">
       <AuthContext.Provider value={providerUser}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          {/* login */}
+          <Route element={<PrivateRouteEdit />}>
+            <Route path="/info" element={<InfoConference />} />
+          </Route>
+          {/* login */}
+
+          {/* 403 */}
+          <Route element={<PrivateRouteInfoAndCreate />}>
+            <Route path="/create" element={<CreateConference />} />
+            <Route path="/edit" element={<EditConference />} />
+          </Route>
+          {/* 403 */}
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/create" element={<CreateConference />} />
-          <Route path="/info" element={<InfoConference />} />
-          <Route path="/edit" element={<EditConference />} />
+          <Route path="/" element={<Home />} />
         </Routes>
       </AuthContext.Provider>
     </div>

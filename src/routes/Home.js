@@ -6,7 +6,6 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import { useGetConferencesQuery } from '../redux';
-import { useDeleteConferencesMutation } from '../redux';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -17,11 +16,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function Home() {
   const { data = [], isLoading } = useGetConferencesQuery();
-  const [deleteConferences, { isError }] = useDeleteConferencesMutation();
 
-  const handleDeleteConferences = async (id) => {
-    await deleteConferences(id);
-  };
   if (isLoading) return <p>Loading...</p>;
 
   return (
@@ -38,7 +33,6 @@ export default function Home() {
                   title={conference.title}
                   date={conference.date}
                   id={conference.id}
-                  handleDeleteConferences={handleDeleteConferences}
                 />
               </Item>
             ))}
