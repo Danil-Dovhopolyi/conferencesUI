@@ -28,6 +28,9 @@ export const conferencesApi = createApi({
     }),
     getConferenceById: build.query({
       query: (id) => `/conferences/${id}`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
     }),
     updateConference: build.mutation({
       query(data) {

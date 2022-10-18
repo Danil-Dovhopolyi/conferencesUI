@@ -11,31 +11,41 @@ import { AuthContext } from './hooks/useAuth';
 import { PrivateRouteInfoAndCreate } from './routes/PrivateRoute/PrivateRouteInfoAndCreate';
 import { PrivateRouteEdit } from './routes/PrivateRoute/PrivateRouteEdit';
 import { PrivateRouteAuth } from './routes/PrivateRoute/PrivateRouteAuth';
+import { Sanctum } from 'react-sanctum';
 function App() {
   const [user, setUser] = useState(null);
   const providerUser = useMemo(() => ({ user, setUser }), [user, setUser]);
+  const sanctumConfig = {
+    apiUrl: 'http://127.0.0.1:8000',
+    csrfCookieRoute: 'csrf-cookie',
+    signInRoute: 'login',
+    signOutRoute: 'logout',
+    userObjectRoute: 'api/user',
+  };
   return (
     <div className="App">
-      <AuthContext.Provider value={providerUser}>
-        <Routes>
-          {/* login */}
-          <Route element={<PrivateRouteEdit />}>
-            <Route path="/info" element={<InfoConference />} />
-          </Route>
-          {/* login */}
+      <Sanctum config={sanctumConfig}>
+        <AuthContext.Provider value={providerUser}>
+          <Routes>
+            {/* login */}
+            <Route element={<PrivateRouteEdit />}>
+              <Route path="/info" element={<InfoConference />} />
+            </Route>
+            {/* login */}
 
-          {/* 403 */}
-          <Route element={<PrivateRouteInfoAndCreate />}>
-            <Route path="/create" element={<CreateConference />} />
-            <Route path="/edit" element={<EditConference />} />
-          </Route>
-          {/* 403 */}
+            {/* 403 */}
+            <Route element={<PrivateRouteInfoAndCreate />}>
+              <Route path="/create" element={<CreateConference />} />
+              <Route path="/edit" element={<EditConference />} />
+            </Route>
+            {/* 403 */}
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </AuthContext.Provider>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </AuthContext.Provider>
+      </Sanctum>
     </div>
   );
 }

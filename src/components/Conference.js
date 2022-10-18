@@ -11,6 +11,7 @@ export default function Conference({
   handleDeleteConferences,
 }) {
   let url = `http://localhost:3000/info/?id=${id}`;
+
   return (
     <div className="p-2">
       <div class="d-flex w-100 justify-content-between m-1">
@@ -25,7 +26,6 @@ export default function Conference({
         >
           Info
         </Link>
-
         <Link to={`/edit/?id=${id}`} type="button" class="btn btn-warning w-25">
           Edit
         </Link>
