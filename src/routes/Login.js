@@ -10,31 +10,7 @@ import { useFormik } from 'formik';
 import axios from 'axios';
 import { AuthContext } from '../hooks/useAuth';
 import { Navigate } from 'react-router';
-import { useSanctum } from 'react-sanctum';
 export default function Login() {
-  //   onSubmit: (values, { resetForm }) => {
-  //     axios
-  //       .get('/sanctum/csrf-cookie')
-  //       .then((response) => {
-  //         console.log(response)
-  //         axios
-  //           .post('http://127.0.0.1:8000/api/login', {
-  //             email: formik.values.email,
-  //             password: formik.values.password,
-  //           })
-  //           .then((res) =>
-  //             setUser((prevState) => ({
-  //               ...res.data,
-  //               isLoggin: true,
-  //             }))
-  //           )
-  //           .catch((err) => console.log(err));
-  //         resetForm();
-  //       })
-  //       .catch((err) => console.log('csrf: ' + err));
-  //   },
-  // });
-  // const { authenticated, user, signIn } = useSanctum();
   const { user, setUser } = useContext(AuthContext);
   const formik = useFormik({
     initialValues: {

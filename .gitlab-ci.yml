@@ -1,0 +1,31 @@
+.base_autodeploy_script: &base_autodeploy_script
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  - current_dir=$(pwd)
+  - remove_dir=$(date +'%m%d%Y%H%M%S')
+  - cd src
+  - scp "$SSH_USER_NAME"@isp.groupbwt.com:"$SERVER_DIR_FRONT"/.env .env
+  - node -v
+  - npm install
+  - npm run build
+  - scp -r "$current_dir"/src/dist "$SSH_USER_NAME"@isp.groupbwt.com:"$SERVER_DIR_FRONT"/releases/"$remove_dir"
+  - cd ..
+  - envoy run deploy --remove_dir="$remove_dir" --server_dir="$SERVER_DIR_FRONT"
+
+deploy-current-branche:
+  image: groupbwt/gitlab-runner-envoy-node:latest
+  script:
+    - *base_autodeploy_script
+  only:
+    refs:
+      - branches
+    variables:
+      - $CI_COMMIT_REF_NAME == $AUTO_DEPLOY_BRANCH
+
+manual-deploy:
+  image: groupbwt/gitlab-runner-envoy-node:latest
+  script:
+    - *base_autodeploy_script
+  when: manual
