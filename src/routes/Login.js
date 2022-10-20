@@ -38,7 +38,7 @@ export default function Login() {
     },
   });
 
-  const storage = localStorage.setItem('user', JSON.stringify(user));
+  localStorage.setItem('user', JSON.stringify(user));
   if (user) {
     return <Navigate replace to={'/'} />;
   }

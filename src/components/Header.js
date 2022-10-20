@@ -17,7 +17,7 @@ const settings = ['Logout'];
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const { user, setUser } = useContext(AuthContext);
+  const { setUser } = useContext(AuthContext);
   const storage = JSON.parse(localStorage.getItem('user'));
   useEffect(() => {
     const loggedInUser = localStorage.getItem('user');
@@ -25,7 +25,7 @@ const ResponsiveAppBar = () => {
       const foundUser = JSON.parse(loggedInUser);
       setUser(foundUser);
     }
-  }, []);
+  });
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('user');
