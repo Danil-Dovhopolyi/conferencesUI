@@ -123,7 +123,7 @@ const Register = () => {
       .catch((err) => console.log(err.response));
     resetForm();
   };
-  const storage = localStorage.setItem('user', JSON.stringify(user));
+  localStorage.setItem('user', JSON.stringify(user));
   if (user) {
     return <Navigate replace to={'/'} />;
   }
