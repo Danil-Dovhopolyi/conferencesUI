@@ -10,7 +10,6 @@
   - node -v
   - npm install
   - npm run build
-  - ls
   - scp -r "$current_dir"/build "$SSH_USER_NAME"@isp.groupbwt.com:"$SERVER_DIR_FRONT"/releases/"$remove_dir"
   - cd ..
   - envoy run deploy --remove_dir="$remove_dir" --server_dir="$SERVER_DIR_FRONT"
