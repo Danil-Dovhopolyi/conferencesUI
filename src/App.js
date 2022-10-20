@@ -10,7 +10,6 @@ import EditConference from './routes/EditConference';
 import { AuthContext } from './hooks/useAuth';
 import { PrivateRouteInfoAndCreate } from './routes/PrivateRoute/PrivateRouteInfoAndCreate';
 import { PrivateRouteEdit } from './routes/PrivateRoute/PrivateRouteEdit';
-import { PrivateRouteAuth } from './routes/PrivateRoute/PrivateRouteAuth';
 import { Sanctum } from 'react-sanctum';
 import CreateReport from './routes/reportRoutes/CreateReport';
 import Reports from './routes/reportRoutes/Reports';

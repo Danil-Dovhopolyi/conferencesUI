@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import {
   Card,
   CardContent,
@@ -10,16 +10,13 @@ import {
   CardHeader,
   FormControl,
 } from '@material-ui/core';
-import 'react-phone-input-2/lib/style.css';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
 import { TextField } from '@mui/material';
 import Header from '../components/Header';
 import { useGetConferenceByIdQuery } from '../redux';
 import { useUpdateConferenceMutation } from '../redux';
 import Map from '../components/Map';
 import './FormStyles.scss';
-
-//Data
 
 const countries = [
   {
@@ -47,8 +44,7 @@ const countries = [
 const EditConference = () => {
   const params = new URL(document.location.href).searchParams;
   const id = params.get('id'); // "1"
-  const [updateConference, updateResult] = useUpdateConferenceMutation(id);
-  console.log(updateResult);
+  const [updateConference] = useUpdateConferenceMutation(id);
 
   const onSubmit = async (values) => {
     await updateConference({ id, ...values });
