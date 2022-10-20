@@ -23,10 +23,16 @@ export default function Login() {
         .then((response) => {
           console.log(response);
           axios
-            .post('http://127.0.0.1:8000/api/login', {
-              email: values.email,
-              password: values.password,
-            })
+            .post(
+              'http://127.0.0.1:8000/api/login',
+              {
+                email: values.email,
+                password: values.password,
+              },
+              {
+                withCredential: true,
+              }
+            )
             .then((res) =>
               setUser((prevState) => ({
                 ...res.data,

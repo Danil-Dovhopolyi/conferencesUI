@@ -13,8 +13,10 @@ import {
 } from '@material-ui/pickers';
 
 import DateFnsUtils from '@date-io/date-fns';
+import { useAddReportMutation } from '../../redux';
 
 export default function CreateReport() {
+  const [addReport] = useAddReportMutation();
   const formik = useFormik({
     initialValues: {
       topic: '',
@@ -22,8 +24,9 @@ export default function CreateReport() {
       dateStart: null,
       dateEnd: null,
     },
-    onSubmit: (values) => {
-      console.log(values);
+
+    onSubmit: async (values) => {
+      await addReport({ ...values });
     },
   });
   return (

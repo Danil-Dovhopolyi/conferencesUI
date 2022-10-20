@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { FacebookButton, FacebookCount } from 'react-social';
-
+import { Button } from '@mui/material';
 export default function Conference({
   title,
   date,
@@ -34,7 +34,11 @@ export default function Conference({
         className="share-conf"
         style={{ display: 'flex', justifyContent: 'space-between' }}
       >
-        <button className="btn btn-success">Join</button>
+        <Link to={'/report-create'}>
+          <Button variant="contained" color="success">
+            Join
+          </Button>
+        </Link>
         <div className="social">
           <FacebookButton url={url} appId={436128925307607}>
             <FacebookCount url={url} />

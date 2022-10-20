@@ -14,6 +14,8 @@ import { PrivateRouteAuth } from './routes/PrivateRoute/PrivateRouteAuth';
 import { Sanctum } from 'react-sanctum';
 import CreateReport from './routes/reportRoutes/CreateReport';
 import Reports from './routes/reportRoutes/Reports';
+import InfoReport from './routes/reportRoutes/InfoReport';
+import EditReport from './routes/reportRoutes/EditReport';
 function App() {
   const [user, setUser] = useState(null);
   const providerUser = useMemo(() => ({ user, setUser }), [user, setUser]);
@@ -42,8 +44,10 @@ function App() {
             </Route>
             {/* 403 */}
 
-            <Route path="/create-report" element={<CreateReport />} />
+            <Route path="/report-create" element={<CreateReport />} />
             <Route path="/reports" element={<Reports />} />
+            <Route path="/report-info" element={<InfoReport />} />
+            <Route path="/report-edit" element={<EditReport />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<Home />} />
