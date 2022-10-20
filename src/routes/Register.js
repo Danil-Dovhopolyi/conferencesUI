@@ -12,7 +12,6 @@ import {
   CardHeader,
   FormControl,
 } from '@material-ui/core';
-import 'react-phone-input-2/lib/style.css';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { TextField } from 'formik-material-ui';
