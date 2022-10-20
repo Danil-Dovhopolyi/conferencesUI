@@ -3,12 +3,7 @@ import { Link } from 'react-router-dom';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { FacebookButton, FacebookCount } from 'react-social';
 
-export default function Conference({
-  title,
-  date,
-  id,
-  handleDeleteConferences,
-}) {
+export default function Conference({ title, date, id }) {
   let url = `http://localhost:3000/info/?id=${id}`;
 
   return (

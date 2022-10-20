@@ -1,36 +1,19 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
-// --- Formik  imports --- //
 import { Formik, Form } from 'formik';
 
-// --- Material Ui Imports --- //
-import { Typography, Container, Button, Box } from '@material-ui/core';
+import { Container, Button, Box } from '@material-ui/core';
 
-// --- Material Ui Picker Imports --- //
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
-  KeyboardDatePicker,
 } from '@material-ui/pickers';
 
 import DateFnsUtils from '@date-io/date-fns';
 
-// --- Yup Imports --- //
-import * as yup from 'yup';
-
-// --- Custom Imports --- //
-import { DisplayFormikProps } from './DisplayFormikProps';
-
-// --- Form Schema --- //
 var formSchema = {
-  dateStart: null, // if date is defiend as '' yup will throw a invalid date error
+  dateStart: null,
 };
-
-// --- Validation Schema --- //
-var validationSchema = yup.object().shape({
-  date: yup.date().nullable(),
-});
 
 function SecondsTimePicker() {
   return (
