@@ -10,8 +10,36 @@ import { useFormik } from 'formik';
 import axios from 'axios';
 import { AuthContext } from '../hooks/useAuth';
 import { Navigate } from 'react-router';
+import { useCookies } from 'react-cookie';
+
 export default function Login() {
+  //   axios
+  //     .get('/sanctum/csrf-cookie')
+  //     .then((response) => {
+  //       console.log(response);
+  //       axios
+  //         .post(
+  //           'http://127.0.0.1:8000/api/login',
+  //           {
+  //             email: values.email,
+  //             password: values.password,
+  //           },
+  //           {
+  //             withCredential: true,
+  //           }
+  //         )
+  //         .then((res) => {
+  //           setUser((prevState) => ({
+  //             ...res.data,
+  //             isLoggin: true,
+  //           }));
+  //           setCookie('token', res.data.token, { path: '/' });
+  //         });
+  //     })
+  //     .catch((err) => console.log('csrf: ' + err));
+  // },
   const { user, setUser } = useContext(AuthContext);
+  const [cookies, setCookie] = useCookies(['token']);
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -19,28 +47,25 @@ export default function Login() {
     },
     onSubmit: (values, { resetForm }) => {
       axios
-        .get('http://127.0.0.1:8000/api/csrf-cookie')
-        .then((response) => {
-          console.log(response);
+        .get('http://127.0.0.1:8000/api/csrf-cookie', { withCredentials: true })
+        .then(() => {
           axios
-            .post(
-              'http://127.0.0.1:8000/api/login',
-              {
-                email: values.email,
-                password: values.password,
-              },
-              {
-                withCredential: true,
+            .post('http://127.0.0.1:8000/api/login', {
+              email: values.email,
+              password: values.password,
+            })
+            .then((response) => {
+              if (response.data.error) {
+                console.log(response.data.error);
+              } else {
+                setUser((prevState) => ({
+                  ...response.data,
+                  isLoggin: true,
+                }));
+                setCookie('token', response.data.token, { path: '/' });
               }
-            )
-            .then((res) =>
-              setUser((prevState) => ({
-                ...res.data,
-                isLoggin: true,
-              }))
-            );
-        })
-        .catch((err) => console.log('csrf: ' + err));
+            });
+        });
     },
   });
 

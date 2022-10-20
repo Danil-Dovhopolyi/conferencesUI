@@ -6,7 +6,6 @@ import {
   Button,
   CardHeader,
 } from '@material-ui/core';
-import 'react-phone-input-2/lib/style.css';
 import { Formik, Form } from 'formik';
 import { TextField } from '@mui/material';
 import Header from '../../components/Header';

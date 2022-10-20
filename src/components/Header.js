@@ -11,6 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../hooks/useAuth';
+import { useCookies } from 'react-cookie';
 const pages = ['Create'];
 const settings = ['Logout'];
 
@@ -18,6 +19,7 @@ const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const { user, setUser } = useContext(AuthContext);
+  const [cookie, setCookies] = useCookies(['token']);
   const storage = JSON.parse(localStorage.getItem('user'));
   useEffect(() => {
     const loggedInUser = localStorage.getItem('user');
@@ -29,6 +31,7 @@ const ResponsiveAppBar = () => {
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    setCookies('token', null);
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
