@@ -21,6 +21,7 @@ const ResponsiveAppBar = () => {
   const { user, setUser } = useContext(AuthContext);
   const [cookie, setCookies] = useCookies(['token']);
   const storage = JSON.parse(localStorage.getItem('user'));
+
   useEffect(() => {
     const loggedInUser = localStorage.getItem('user');
     if (loggedInUser) {
@@ -120,6 +121,16 @@ const ResponsiveAppBar = () => {
                 </Button>
               </Link>
             ))}
+            {user?.roles.find((role) => role.name === 'conferee' || 'admin') ? (
+              <Link to={'/reports'}>
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  Reports
+                </Button>
+              </Link>
+            ) : null}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

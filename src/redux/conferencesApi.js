@@ -30,7 +30,6 @@ export const conferencesApi = createApi({
           body,
           headers: {
             Authorization: `Bearer ${getCookie('token')}`,
-            'Content-Type': 'application/json',
           },
         };
       },
@@ -40,13 +39,18 @@ export const conferencesApi = createApi({
         return {
           url: `conferences/${id}`,
           method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${getCookie('token')}`,
+            'Content-Type': 'application/json',
+          },
         };
       },
     }),
     getConferenceById: build.query({
       query: (id) => `/conferences/${id}`,
       headers: {
-        'Content-Type': 'application/json',
+        Authorization: `${getCookie('token')}`,
+        'content-type': 'application/json',
       },
     }),
     updateConference: build.mutation({
@@ -56,6 +60,11 @@ export const conferencesApi = createApi({
           url: `conferences/${id}`,
           method: 'PUT',
           body,
+          headers: {
+            Authorization: `Bearer ${getCookie('token')}`,
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
         };
       },
     }),

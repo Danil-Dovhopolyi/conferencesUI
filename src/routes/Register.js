@@ -19,6 +19,7 @@ import Header from '../components/Header';
 import { AuthContext } from '../hooks/useAuth';
 import axios from 'axios';
 import { Navigate } from 'react-router';
+import { useCookies } from 'react-cookie';
 const useStyle = makeStyles((theme) => ({
   padding: {
     padding: theme.spacing(3),
@@ -100,30 +101,40 @@ let validationSchema = Yup.object().shape({
 const Register = () => {
   const { user, setUser } = useContext(AuthContext);
   const classes = useStyle();
+  const [cookies, setCookie] = useCookies(['token']);
   const onSubmit = (values, { resetForm }) => {
     axios
-      .post('http://127.0.0.1:8000/api/register', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        firstname: values.firstName,
-        lastname: values.lastName,
-        email: values.email,
-        password: values.password,
-        password_confirmation: values.password_confirmation,
-        country: values.country,
-        role: values.role,
-      })
-      .then((res) =>
-        setUser((prevState) => ({
-          ...res.data,
-          isLoggin: true,
-        }))
-      )
-      .catch((err) => console.log(err.response));
-    resetForm();
+      .get('http://127.0.0.1:8000/api/csrf-cookie', { withCredentials: true })
+      .then(() => {
+        axios
+          .post('http://127.0.0.1:8000/api/register', {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            firstname: values.firstName,
+            lastname: values.lastName,
+            email: values.email,
+            password: values.password,
+            password_confirmation: values.password_confirmation,
+            country: values.country,
+            role: values.role,
+          })
+          .then((response) => {
+            if (response.data.error) {
+              console.log(response.data.error);
+            } else {
+              setUser((prevState) => ({
+                ...response.data,
+                isLoggin: true,
+              }));
+              setCookie('token', response.data.token, { path: '/' });
+            }
+            resetForm();
+          });
+      });
   };
-  const storage = localStorage.setItem('user', JSON.stringify(user));
+
+  localStorage.setItem('user', JSON.stringify(user));
   if (user) {
     return <Navigate replace to={'/'} />;
   }

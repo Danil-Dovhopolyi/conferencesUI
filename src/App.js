@@ -8,8 +8,10 @@ import CreateConference from './routes/CreateConference';
 import InfoConference from './routes/InfoConference';
 import EditConference from './routes/EditConference';
 import { AuthContext } from './hooks/useAuth';
-import { PrivateRouteInfoAndCreate } from './routes/PrivateRoute/PrivateRouteInfoAndCreate';
+import { PrivateRouteCreate } from './routes/PrivateRoute/PrivateRouteCreate';
 import { PrivateRouteEdit } from './routes/PrivateRoute/PrivateRouteEdit';
+import { PrivateRouteInfo } from './routes/PrivateRoute/PrivateRouteInfo';
+import { PrivateRouteAuth } from './routes/PrivateRoute/PrivateRouteAuth';
 import CreateReport from './routes/reportRoutes/CreateReport';
 import Reports from './routes/reportRoutes/Reports';
 import InfoReport from './routes/reportRoutes/InfoReport';
@@ -22,26 +24,28 @@ function App() {
     <div className="App">
       <AuthContext.Provider value={providerUser}>
         <Routes>
-          {/* login */}
-          <Route element={<PrivateRouteEdit />}>
+          <Route element={<PrivateRouteAuth />}></Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          <Route path="/" element={<Home />} />
+
+          <Route element={<PrivateRouteInfo />}>
             <Route path="/info" element={<InfoConference />} />
           </Route>
-          {/* login */}
 
-          {/* 403 */}
-          <Route element={<PrivateRouteInfoAndCreate />}>
-            <Route path="/create" element={<CreateConference />} />
+          <Route element={<PrivateRouteEdit />}>
             <Route path="/edit" element={<EditConference />} />
           </Route>
-          {/* 403 */}
+
+          <Route element={<PrivateRouteCreate />}>
+            <Route path="/create" element={<CreateConference />} />
+          </Route>
 
           <Route path="/report-create" element={<CreateReport />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/report-info" element={<InfoReport />} />
           <Route path="/report-edit" element={<EditReport />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/" element={<Home />} />
         </Routes>
       </AuthContext.Provider>
     </div>

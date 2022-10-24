@@ -13,31 +13,6 @@ import { Navigate } from 'react-router';
 import { useCookies } from 'react-cookie';
 
 export default function Login() {
-  //   axios
-  //     .get('/sanctum/csrf-cookie')
-  //     .then((response) => {
-  //       console.log(response);
-  //       axios
-  //         .post(
-  //           'http://127.0.0.1:8000/api/login',
-  //           {
-  //             email: values.email,
-  //             password: values.password,
-  //           },
-  //           {
-  //             withCredential: true,
-  //           }
-  //         )
-  //         .then((res) => {
-  //           setUser((prevState) => ({
-  //             ...res.data,
-  //             isLoggin: true,
-  //           }));
-  //           setCookie('token', res.data.token, { path: '/' });
-  //         });
-  //     })
-  //     .catch((err) => console.log('csrf: ' + err));
-  // },
   const { user, setUser } = useContext(AuthContext);
   const [cookies, setCookie] = useCookies(['token']);
   const formik = useFormik({
@@ -69,7 +44,7 @@ export default function Login() {
     },
   });
 
-  const storage = localStorage.setItem('user', JSON.stringify(user));
+  localStorage.setItem('user', JSON.stringify(user));
   if (user) {
     return <Navigate replace to={'/'} />;
   }

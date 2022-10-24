@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Header from '../components/Header';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -13,10 +13,12 @@ import Select from '@mui/material/Select';
 import { countries } from '../mock/country';
 import { useDeleteConferenceMutation } from '../redux';
 import Map from '../components/Map';
+import { AuthContext } from '../hooks/useAuth';
 
 export default function InfoConference() {
   const params = new URL(document.location.href).searchParams;
   const id = params.get('id'); // "1"
+  const user = JSON.parse(localStorage.getItem('user'));
   const [deleteConferences] = useDeleteConferenceMutation(id);
   const handleDeleteConferences = async (id) => {
     await deleteConferences(id);
@@ -84,14 +86,20 @@ export default function InfoConference() {
               <Link to={'/'} variant="contained">
                 <Button variant="contained">Back</Button>
               </Link>
-              <Button
-                type="button"
-                variant="contained"
-                color="error"
-                onClick={() => handleDeleteConferences(id)}
-              >
-                Delete
-              </Button>
+              {user.roles.map((role) =>
+                role.name === 'admin' ? (
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="error"
+                    onClick={() => handleDeleteConferences(id)}
+                  >
+                    Delete
+                  </Button>
+                ) : (
+                  ''
+                )
+              )}
             </div>
           </form>
         </div>

@@ -1,32 +1,34 @@
 import React from 'react';
-import {
-  Card,
-  CardContent,
-  CardActions,
-  Button,
-  CardHeader,
-} from '@material-ui/core';
+import { Card, CardContent, CardActions, CardHeader } from '@material-ui/core';
+import Button from '@mui/material/Button';
 import { Formik, Form } from 'formik';
 import { TextField } from '@mui/material';
 import Header from '../../components/Header';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import '../FormStyles.scss';
-import { useGetReportByIdQuery, useUpdateReportMutation } from '../../redux';
+import {
+  useGetReportByIdQuery,
+  useUpdateReportMutation,
+  useDeleteReportMutation,
+} from '../../redux';
 import { Box } from '@material-ui/core';
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
 } from '@material-ui/pickers';
-
 import DateFnsUtils from '@date-io/date-fns';
 
 const EditReport = () => {
   const params = new URL(document.location.href).searchParams;
   const id = params.get('id'); // "1"
-  const [updateReport, updateResult] = useUpdateReportMutation(id);
-  console.log(updateResult);
+  const [updateReport] = useUpdateReportMutation(id);
   const onSubmit = async (values) => {
     await updateReport({ id, ...values });
+  };
+
+  const [deleteReport] = useDeleteReportMutation(id);
+  const handleDeleteReport = async (id) => {
+    await deleteReport(id);
   };
 
   const { data, isLoading } = useGetReportByIdQuery(id);
@@ -145,6 +147,14 @@ const EditReport = () => {
                         type="Submit"
                       >
                         Edit
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="contained"
+                        color="error"
+                        onClick={() => handleDeleteReport(id)}
+                      >
+                        Cancel participation
                       </Button>
                     </CardActions>
                   </div>

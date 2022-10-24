@@ -1,8 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import React, { useContext } from 'react';
 import { AuthContext } from '../../hooks/useAuth';
-import Error403 from '../Error403';
-export const PrivateRouteEdit = () => {
+export const PrivateRouteInfo = () => {
   const { user } = useContext(AuthContext);
   const userPermission = [];
   user?.permissions.roles.map((perm) =>
@@ -12,10 +11,10 @@ export const PrivateRouteEdit = () => {
   );
   if (
     user &&
-    userPermission.find((permission) => permission.name === 'conference_edit')
+    userPermission.find((permission) => permission.name === 'conference_show')
   ) {
     return <Outlet />;
   } else {
-    return <Error403 />;
+    return <Navigate to={'/login'} />;
   }
 };

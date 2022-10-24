@@ -6,16 +6,20 @@ import {
 } from '@material-ui/pickers';
 import { TextField } from '@mui/material';
 import DateFnsUtils from '@date-io/date-fns';
-import { useGetReportByIdQuery } from '../../redux';
+import { useDeleteReportMutation, useGetReportByIdQuery } from '../../redux';
 import Header from '../../components/Header';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 
 export default function InfoReport() {
   const params = new URL(document.location.href).searchParams;
   const id = params.get('id'); // "1"
   const { data, isLoading } = useGetReportByIdQuery(id);
+  const [deleteReport] = useDeleteReportMutation(id);
+  const handleDeleteReport = async (id) => {
+    await deleteReport(id);
+  };
   if (isLoading) return <p>Loading...</p>;
   return (
     <>
@@ -86,7 +90,12 @@ export default function InfoReport() {
                 <Link to={`/report-edit/?id=${id}`} variant="contained">
                   <Button variant="contained">Edit</Button>
                 </Link>
-                <Button type="button" variant="contained" color="error">
+                <Button
+                  type="button"
+                  variant="contained"
+                  color="error"
+                  onClick={() => handleDeleteReport(id)}
+                >
                   Cancel participation
                 </Button>
               </div>

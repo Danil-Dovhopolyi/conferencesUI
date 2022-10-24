@@ -33,7 +33,12 @@ export default function Report({ topic, id, start, end, descr }) {
             color="text.secondary"
           >{`End: ${end}`}</Typography>
         </div>
-        <Typography variant="p">{`Description: ${descr}`}</Typography>
+        <Typography
+          variant="p"
+          inputProps={{
+            maxLength: 10,
+          }}
+        >{`Description: ${descr}`}</Typography>
       </CardContent>
       <CardActions>
         <Button size="small">

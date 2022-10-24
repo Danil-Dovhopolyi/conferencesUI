@@ -16,7 +16,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function Home() {
   const { data = [], isLoading } = useGetConferencesQuery();
-
+  console.log(data);
   if (isLoading) return <p>Loading...</p>;
 
   return (
@@ -26,16 +26,21 @@ export default function Home() {
         <p>All Conferences</p>
         <Box sx={{ width: '100%' }}>
           <Stack spacing={2} sx={{ margin: '1%' }}>
-            {data.conferences.map((conference) => (
-              <Item>
-                <Conference
-                  key={conference.id}
-                  title={conference.title}
-                  date={conference.date}
-                  id={conference.id}
-                />
-              </Item>
-            ))}
+            {data.length !== 0 ? (
+              data.conferences.map((conference) => (
+                <Item>
+                  <Conference
+                    key={conference.id}
+                    title={conference.title}
+                    date={conference.date}
+                    id={conference.id}
+                    creator={conference.creator_id}
+                  />
+                </Item>
+              ))
+            ) : (
+              <p>Conferences not created</p>
+            )}
           </Stack>
         </Box>
       </div>

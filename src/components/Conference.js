@@ -4,13 +4,15 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { FacebookButton, FacebookCount } from 'react-social';
 import { Button } from '@mui/material';
-export default function Conference({
-  title,
-  date,
-  id,
-  handleDeleteConferences,
-}) {
+import { useContext } from 'react';
+import { AuthContext } from '../hooks/useAuth';
+export default function Conference({ title, date, id, creator }) {
   let url = `http://localhost:3000/info/?id=${id}`;
+  const { user } = useContext(AuthContext);
+  console.log(user.user.id);
+  const userRoles = [];
+  user?.roles.map((role) => userRoles.push(role.name));
+  console.log(userRoles);
 
   return (
     <div className="p-2">
@@ -34,7 +36,15 @@ export default function Conference({
         className="share-conf"
         style={{ display: 'flex', justifyContent: 'space-between' }}
       >
-        <Link to={'/report-create'}>
+        <Link
+          to={
+            user &&
+            user.user.id === creator &&
+            userRoles.find((role) => role.name === 'admin' || 'conferee')
+              ? '/report-create'
+              : '/hello'
+          }
+        >
           <Button variant="contained" color="success">
             Join
           </Button>
