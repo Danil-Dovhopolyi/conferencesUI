@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Home from './routes/Home';
-import Login from './routes/Login';
-import Register from './routes/Register';
+import Login from './routes/Auth/Login';
+import Register from './routes/Auth/Register';
 import './App.scss';
 import CreateConference from './routes/CreateConference';
 import InfoConference from './routes/InfoConference';
@@ -16,6 +16,8 @@ import CreateReport from './routes/reportRoutes/CreateReport';
 import Reports from './routes/reportRoutes/Reports';
 import InfoReport from './routes/reportRoutes/InfoReport';
 import EditReport from './routes/reportRoutes/EditReport';
+import ProfileEdit from './routes/Auth/ProfileEdit';
+import Favourite from './routes/FavouriteReports/Favourite';
 function App() {
   const [user, setUser] = useState(null);
   const providerUser = useMemo(() => ({ user, setUser }), [user, setUser]);
@@ -29,6 +31,7 @@ function App() {
           <Route path="/register" element={<Register />} />
 
           <Route path="/" element={<Home />} />
+          <Route path="/favourite" element={<Favourite />} />
 
           <Route element={<PrivateRouteInfo />}>
             <Route path="/info" element={<InfoConference />} />
@@ -41,7 +44,7 @@ function App() {
           <Route element={<PrivateRouteCreate />}>
             <Route path="/create" element={<CreateConference />} />
           </Route>
-
+          <Route path="/profile" element={<ProfileEdit />} />
           <Route path="/report-create" element={<CreateReport />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/report-info" element={<InfoReport />} />

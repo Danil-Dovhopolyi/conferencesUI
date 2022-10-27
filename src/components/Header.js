@@ -11,6 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../hooks/useAuth';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useCookies } from 'react-cookie';
 const pages = ['Create'];
 const settings = ['Logout'];
@@ -20,15 +21,17 @@ const ResponsiveAppBar = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const { user, setUser } = useContext(AuthContext);
   const [cookie, setCookies] = useCookies(['token']);
-  const storage = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem('user');
+    localStorage.setItem('user', JSON.stringify(user));
+    const loggedInUser = JSON.parse(localStorage.getItem('user'));
     if (loggedInUser) {
-      const foundUser = JSON.parse(loggedInUser);
-      setUser(foundUser);
+      setUser(loggedInUser);
     }
-  }, []);
+  }, [user]);
+
+  const storage = JSON.parse(localStorage.getItem('user'));
+  console.log(storage);
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('user');
@@ -121,7 +124,7 @@ const ResponsiveAppBar = () => {
                 </Button>
               </Link>
             ))}
-            {user?.roles.find((role) => role.name === 'conferee' || 'admin') ? (
+            {user ? (
               <Link to={'/reports'}>
                 <Button
                   onClick={handleCloseNavMenu}
@@ -132,7 +135,11 @@ const ResponsiveAppBar = () => {
               </Link>
             ) : null}
           </Box>
-
+          <Box sx={{ mr: '4%' }}>
+            <Link to={'/favourite'} style={{ color: 'red' }}>
+              <FavoriteIcon />
+            </Link>
+          </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               {storage ? (
@@ -179,6 +186,11 @@ const ResponsiveAppBar = () => {
                   </Typography>
                 </MenuItem>
               ))}
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Link textAlign="center" to={`/profile/?id=${user?.user?.id}`}>
+                  Profile
+                </Link>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

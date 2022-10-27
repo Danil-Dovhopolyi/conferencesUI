@@ -5,10 +5,10 @@ import Typography from '@mui/joy/Typography';
 import TextField from '@mui/joy/TextField';
 import Button from '@mui/joy/Button';
 import Link from '@mui/joy/Link';
-import Header from '../components/Header';
+import Header from '../../components/Header';
 import { useFormik } from 'formik';
 import axios from 'axios';
-import { AuthContext } from '../hooks/useAuth';
+import { AuthContext } from '../../hooks/useAuth';
 import { Navigate } from 'react-router';
 import { useCookies } from 'react-cookie';
 

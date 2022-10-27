@@ -8,8 +8,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../hooks/useAuth';
 export default function Conference({ title, date, id, creator }) {
   let url = `http://localhost:3000/info/?id=${id}`;
-  const { user } = useContext(AuthContext);
-  console.log(user.user.id);
+  const { user, setUser } = useContext(AuthContext);
   const userRoles = [];
   user?.roles.map((role) => userRoles.push(role.name));
   console.log(userRoles);

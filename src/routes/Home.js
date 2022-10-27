@@ -16,7 +16,6 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function Home() {
   const { data = [], isLoading } = useGetConferencesQuery();
-  console.log(data);
   if (isLoading) return <p>Loading...</p>;
 
   return (

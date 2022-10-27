@@ -15,8 +15,8 @@ import {
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { TextField } from 'formik-material-ui';
-import Header from '../components/Header';
-import { AuthContext } from '../hooks/useAuth';
+import Header from '../../components/Header';
+import { AuthContext } from '../../hooks/useAuth';
 import axios from 'axios';
 import { Navigate } from 'react-router';
 import { useCookies } from 'react-cookie';
