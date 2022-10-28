@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Box } from '@material-ui/core';
 import {
   MuiPickersUtilsProvider,
@@ -9,17 +9,29 @@ import DateFnsUtils from '@date-io/date-fns';
 import { useDeleteReportMutation, useGetReportByIdQuery } from '../../redux';
 import Header from '../../components/Header';
 import Button from '@mui/material/Button';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
+import { AuthContext } from '../../hooks/useAuth';
+import { useFormik } from 'formik';
+import { TextEditor } from '../../components/TextEditor';
 
 export default function InfoReport() {
   const params = new URL(document.location.href).searchParams;
   const id = params.get('id'); // "1"
   const { data, isLoading } = useGetReportByIdQuery(id);
+  const { user } = useContext(AuthContext);
   const [deleteReport] = useDeleteReportMutation(id);
+
   const handleDeleteReport = async (id) => {
     await deleteReport(id);
   };
+
+  const formik = useFormik({
+    initialValues: { message: '' },
+    onSubmit: (values) => {
+      console.log('Logging in ', values);
+    },
+  });
   if (isLoading) return <p>Loading...</p>;
   return (
     <>
@@ -27,7 +39,7 @@ export default function InfoReport() {
         <Header />
         <div className="info">
           <div className="form-report">
-            <form className="form__info">
+            <form className="form__info" onSubmit={formik.handleSubmit}>
               <div className="form__title">
                 <TextField
                   id="outlined-basic"
@@ -86,21 +98,57 @@ export default function InfoReport() {
                 }}
                 disabled
               />
-              <div className="form__buttons">
-                <Link to={`/report-edit/?id=${id}`} variant="contained">
-                  <Button variant="contained">Edit</Button>
-                </Link>
-                <Button
-                  type="button"
-                  variant="contained"
-                  color="error"
-                  onClick={() => handleDeleteReport(id)}
-                >
-                  Cancel participation
-                </Button>
-              </div>
+              {user.user.id === data.creator_id ? (
+                <div className="form__buttons">
+                  <Link to={`/report-edit/?id=${id}`} variant="contained">
+                    <Button variant="contained">Edit</Button>
+                  </Link>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="error"
+                    onClick={() => handleDeleteReport(id)}
+                  >
+                    Cancel participation
+                  </Button>
+                </div>
+              ) : (
+                ''
+              )}
             </form>
           </div>
+        </div>
+        <div className="comments">
+          <p>All Comments</p>
+        </div>
+        <div
+          className="post-comment"
+          style={{
+            width: '80%',
+            margin: '0 auto',
+            marginBottom: '5%',
+          }}
+        >
+          <p>Write your comment</p>
+          <form
+            onSubmit={formik.handleSubmit}
+            style={{
+              boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
+            }}
+          >
+            <div className="editor" style={{ padding: '2%' }}>
+              <TextEditor
+                setFieldValue={(val) => formik.setFieldValue('message', val)}
+                value={formik.values.message}
+              />
+            </div>
+            <div
+              className="buttons"
+              style={{ display: 'flex', justifyContent: 'right', gap: '3%' }}
+            >
+              <Button type="submit">Send</Button>
+            </div>
+          </form>
         </div>
       </div>
     </>
