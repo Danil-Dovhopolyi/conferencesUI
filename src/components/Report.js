@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
-
+import FavoriteIcon from '@mui/icons-material/Favorite';
 export default function Report({ topic, id, start, end, descr }) {
   return (
     <Card sx={{ minWidth: 275, margin: '1%' }}>
@@ -45,6 +45,9 @@ export default function Report({ topic, id, start, end, descr }) {
           <Link to={`/report-info/?id=${id}`} type="button">
             Read More
           </Link>
+        </Button>
+        <Button>
+          <FavoriteIcon />
         </Button>
       </CardActions>
     </Card>

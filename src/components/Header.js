@@ -23,15 +23,13 @@ const ResponsiveAppBar = () => {
   const [cookie, setCookies] = useCookies(['token']);
 
   useEffect(() => {
-    localStorage.setItem('user', JSON.stringify(user));
     const loggedInUser = JSON.parse(localStorage.getItem('user'));
     if (loggedInUser) {
       setUser(loggedInUser);
     }
-  }, [user]);
+  }, []);
 
   const storage = JSON.parse(localStorage.getItem('user'));
-  console.log(storage);
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('user');

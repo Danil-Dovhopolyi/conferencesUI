@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -13,6 +13,9 @@ export default function Conference({ title, date, id, creator }) {
   user?.roles.map((role) => userRoles.push(role.name));
   console.log(userRoles);
 
+  useEffect(() => {
+    localStorage.getItem('user');
+  });
   return (
     <div className="p-2">
       <div class="d-flex w-100 justify-content-between m-1">
